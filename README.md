@@ -5,13 +5,10 @@ A Haskell style guide that follows conventions in Imperial College 40009 Computi
 
 least powerful principal when you can do something less powerful but do the same thing and have the same readability do the less powerful thing e.g. pattern matching < guard < case expression (less versatile) so when can you use pattern match, don't use a guard when can you use a guard, don't use a case expression
 
--------------------------------------------------------------------------------
 
 ## line wrap : 80 characters
 
-how to set ruler : go to setting in vscode, search for ruler then add a 
-
-ruler at 79 line
+how to set ruler : go to setting in vscode, search for ruler then add a ruler at 79 line
 
 only links can go over 80 line
 
@@ -19,7 +16,6 @@ ligature : https://vueschool.io/articles/vuejs-tutorials/how-to-install-jetbrain
 
 this font will make your code looks super nice
 
--------------------------------------------------------------------------------
 ## data declaration
 
 align `|` with `=`
@@ -34,15 +30,17 @@ data JSON = JString String
 --          JList   [JSON]      no need to align this, but if you want you can
           | JList [JSON]     
           | JBool Bool
+```
 
--- align the `,` and the `{`, for constructor syntax
+align the `,` and the `{`, for constructor syntax
+
+``` haskell
 data Point = Point
   { pointX :: Double
   , pointY :: Double
   }
 ```
 
--------------------------------------------------------------------------------
 
 ## spacing
 
@@ -90,7 +88,6 @@ sumTo100 :: Int
 sumTo100 = sum [1..100]
 ```
 
--------------------------------------------------------------------------------
 ## pattern matching
 
 pattern matching over guard if you can, try include pre condition and type
@@ -125,7 +122,6 @@ unzipLeft :: [(b1, b2)] -> [b1]
 unzipLeft = map fst 
 ```
 
--------------------------------------------------------------------------------
 ## guards
 
 guard over `if .. then .. else`
@@ -184,7 +180,6 @@ foo = do
       print "hello"
 ```
 
--------------------------------------------------------------------------------
 ## list comp vs map
 
 if operation is simple and short use map
@@ -220,7 +215,6 @@ multTable = [show a ++ " * " ++ show b  ++ " = " ++ show (a * b)
             -- align `|` with `[`
 ```
 
--------------------------------------------------------------------------------
 
 prefer 'where' over 'let .. in' in pure functions 'let' bindings are commonly used in 'do' blocks but there are some holy wars going on there thus I won't really care which one do you use, as long as it looks good
 
