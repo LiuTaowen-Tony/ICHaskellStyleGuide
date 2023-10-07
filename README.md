@@ -1,52 +1,53 @@
 # ICHaskellStyleGuide
-A Haskell style guide that follows conventions in Imperial College 40009 Computing Practical.
 
-## least powerful principal
+A Haskell style guide adhering to the conventions of Imperial College 40009 Computing Practical.
 
-least powerful principal when you can do something less powerful but do the same thing and have the same readability do the less powerful thing e.g. pattern matching < guard < case expression (less versatile) so when can you use pattern match, don't use a guard when can you use a guard, don't use a case expression
+## Least Powerful Principle
 
+Adhere to the Least Powerful Principle whenever possible: if a less powerful construct achieves the same result <mark>and</mark> maintains readability, prefer it over more powerful alternatives. For instance, prefer pattern matching over guards, and guards over case expressions due to their versatility. Utilize pattern matching when possible, and opt for guards over case expressions when applicable.
 
-## line wrap : 80 characters
+## Line Wrap: 80 Characters
 
-how to set ruler : go to setting in vscode, search for ruler then add a ruler at 79 line
+To set the ruler in VSCode:
 
-only links can go over 80 line
+1. Navigate to Settings.
+2. Search for "ruler".
+3. Add a ruler at the 79th character.
 
-ligature : https://vueschool.io/articles/vuejs-tutorials/how-to-install-jetbrains-mono-font-in-visual-studio-code/
+Links are the exception to the 80-character line rule.
 
-this font will make your code looks super nice
+For enhanced code aesthetics, consider using the [JetBrains Mono Font](https://vueschool.io/articles/vuejs-tutorials/how-to-install-jetbrains-mono-font-in-visual-studio-code/) which supports ligatures.
 
-## data declaration
+## Data Declaration
 
-align `|` with `=`
+Align `|` with `=`
 
-``` haskell
+```haskell
 data Tree a = Node (Tree a) (Tree a)
             | Leaf a
 
 data JSON = JString String
           | JNumber Double
           | JObject [(String, JSON)]
---          JList   [JSON]      no need to align this, but if you want you can
+--        | JList   [JSON] -- Alignment optional, but can be done if preferred
           | JList [JSON]     
           | JBool Bool
 ```
 
-align the `,` and the `{`, for constructor syntax
+For constructor syntax, align the `,` and the `{`.
 
-``` haskell
+```haskell
 data Point = Point
   { pointX :: Double
   , pointY :: Double
   }
 ```
 
+## Spacing
 
-## spacing
+Maintain a space after `,` for tuples and lists.
 
-for tuples and lists, space after `,`
-
-``` haskell
+```haskell
 tuple2 :: (Double, Double)
 tuple2 = (x, y)
 tuple3 :: (Double, Double, Double)
@@ -55,102 +56,80 @@ list3  :: [Double]
 list3  = [x, y, z]
 ```
 
-basically do spacing for everything binary operators
+Ensure spacing around binary operators.
 
-``` haskell
+```haskell
 x :: Double
 x = 100 * 31 + 9
 ```
 
-when expression is complicated, do parentheses
+For complex expressions, utilize parentheses for clarity.
 
-``` haskell
+```haskell
 y :: Double
 y = (1 * 4) + (3 * 2 / (6 ^ 20))
 z :: Double
 z = -1
 ```
 
-can omit spacing for `:` 
+Can omit spacing for `:` and `..`. But it would be also fine to have the spaces.
 
-``` haskell
+```haskell
 elem :: Eq t => t -> [t] -> Bool
 elem x []     = False
 elem x (y:ys) = (x == y) || (x `elem` ys)
-```
 
-when precedence is not obvious, use parentheses sometimes it might be obvious for you, but not everyone
-
-can omit spacing for `..`
-
-``` haskell
 sumTo100 :: Int
 sumTo100 = sum [1..100]
 ```
 
-## pattern matching
+## Pattern Matching
 
-pattern matching over guard if you can, try include pre condition and type
+Preface functions with preconditions and types where appropriate, and favor pattern matching over guard statements when possible.
 
-``` haskell
--- pre : x >= 0
+```haskell
+-- Pre: x >= 0
 fib :: (Eq a, Num a, Num p) => a -> p
 fib 0 = 1
 fib 1 = 1
 fib x = fib (x - 1) + fib (x - 2)
 ```
 
-pattern matching over getter functions
+Opt for pattern matching over getter functions, as shown below.
 
-do this 
-
-``` haskell
+```haskell
+-- Preferred
 f :: Ord b => [(b, b)] -> b
 f ((a, b) : xs) = if a > b then b else f xs
-```
 
-don't do this
-
-``` haskell
+-- Not Preferred
 f (x:xs) = if fst x > snd x then snd x else f xs
 ```
 
-only use fst when you are writing something like this
+## Guards
 
-``` haskell
-unzipLeft :: [(b1, b2)] -> [b1]
-unzipLeft = map fst 
-```
+Prefer guards over `if .. then .. else` constructs, except in cases of succinct expressions or within `do` blocks.
 
-## guards
-
-guard over `if .. then .. else`
-
-``` haskell
+```haskell
 getClassOfHonor :: (Ord a, Num a) => a -> String
 getClassOfHonor n
-  | n < 40    
-    = "fail" ++ "superLooooooooooooooooooooooooooooooooooooooongString"
-  | n < 50    
-    = "pass"
-  | n < 60    
-    = "lower second" 
-  | n < 70    
-    = "upper second"
-  | otherwise 
-    = "first"
+  | n < 40    = "fail" ++ "superLooooooooooooooooooooooooooooooooooooooongString"
+  | n < 50    = "pass"
+  | n < 60    = "lower second" 
+  | n < 70    = "upper second"
+  | otherwise = "first"
 ```
 
-only do `if .. then .. else` when the expr is like this long
+Utilize `if .. then .. else` for straightforward expressions:
 
-``` haskell
+```haskell
 max :: Ord p => p -> p -> p
 max a b = if a > b then a else b
 ```
 
-or you can do `if .. then .. else` in a do block
+Or within a `do` block:
 
-``` haskell
+```haskell
 bar :: IO ()
 bar = do
   password <- getLine
@@ -163,7 +142,7 @@ bar = do
       print "try again"
 ```
 
-if there are more than 2 if clause try use `case` instead, not entirely sure how to do this, maybe we can ask Nick together
+For more than two conditions, consider using a `case` expression.
 
 ```haskell
 foo :: IO ()
@@ -180,45 +159,45 @@ foo = do
       print "hello"
 ```
 
-## list comp vs map
+## List Comprehension vs Map
 
-if operation is simple and short use map
+For simple operations, `map` is preferable:
 
-``` haskell
+```haskell
 allAddOne :: [Integer] -> [Integer]
 allAddOne = map (+ 1)
 mapF :: [String] -> [Bool]
 mapF = map (elem 'x' . reverse)
 ```
 
-use list comp when you are mapping and filtering at the same time
+Employ list comprehension for combined mapping and filtering tasks:
 
-``` haskell
+```haskell
 oddSquares :: [Integer]
 oddSquares = [i * i | i <- [1..], odd i]
--- I know you can do `i <- [1,3..], just to make an example
+-- Though `i <- [1,3..]` can be used, this example illustrates a point
 ```
 
-when the operation is complicated
+For complex operations:
 
-``` haskell
+```haskell
 listCompExample :: [Integer]
 listCompExample = [x * x + 5 * 12 `div` 98 + x | x <- oddSquares]
 ```
 
-multiple line example
+Multi-line example:
 
-``` haskell
+```haskell
 multTable :: [String]
 multTable = [show a ++ " * " ++ show b  ++ " = " ++ show (a * b) 
             | a <- [1..9], b <- [1..9], a <= b]
-            -- align `|` with `[`
+            -- Align `|` with `[`
 ```
 
+## 'where' vs 'let .. in'
 
-prefer 'where' over 'let .. in' in pure functions 'let' bindings are commonly used in 'do' blocks but there are some holy wars going on there thus I won't really care which one do you use, as long as it looks good
+In pure functions, 'where' is often preferred over 'let .. in'. However, 'let' bindings are common in 'do' blocks. While there are debates regarding the use of either, ensuring good readability is paramount. It's advisable to avoid using both `let .. in` and `where` within the same function definition.
 
-one thing to notice, try avoid have both `let .. in` and `where` in the same function definition
+For comments, place them before or after the function. For succinct functions, inline comments are permissible. This refined structure should enhance readability and maintain a coherent style throughout your Haskell code.
 
-for comments, write it before and after function but if it is a super short one, you can put in same line
 
