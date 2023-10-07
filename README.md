@@ -106,6 +106,13 @@ f ((a, b) : xs) = if a > b then b else f xs
 f (x:xs) = if fst x > snd x then snd x else f xs
 ```
 
+only use fst when you are writing something like this
+
+```haskell
+unzipLeft :: [(b1, b2)] -> [b1]
+unzipLeft = map fst
+```
+
 ## Guards
 
 Prefer guards over `if .. then .. else` constructs, except in cases of succinct expressions or within `do` blocks.
